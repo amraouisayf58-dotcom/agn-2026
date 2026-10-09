@@ -28,3 +28,6 @@ function closePrivacy(){$('privacy').classList.add('hidden');$('privacyButton').
 $('closePrivacy').onclick=closePrivacy;
 window.handleBack=()=>{if(!$('privacy').classList.contains('hidden')){closePrivacy();return true;}if(!$('info').classList.contains('hidden')){closeInfo();return true;}if(active){home();return true;}if(!$('result').classList.contains('hidden')){home();return true;}return false;};
 document.addEventListener('keydown',e=>{if(e.key==='Escape')window.handleBack();});
+
+// Brief branded opening; local game is ready before this script runs.
+setTimeout(()=>{document.body.classList.remove("loading");$("splash").remove();},1200);
