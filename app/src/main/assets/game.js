@@ -1,7 +1,7 @@
 'use strict';
 const $ = id => document.getElementById(id);
 const canvas=$('field'), ctx=canvas.getContext('2d');
-let high=0; try { high=Number(localStorage.getItem('agn-record'))||0; } catch(_) {}
+let high=0; try { const saved=Number(localStorage.getItem('agn-record'));high=Number.isFinite(saved)&&saved>=0?Math.floor(saved):0; } catch(_) {}
 let score=0,lives=3,time=60,x=200,items=[],spawn=0,last=0,active=false,paused=false,frame=0,keys={left:false,right:false};
 $('record').textContent=high;
 function show(id){for(const name of ['home','play','result']) $(name).classList.toggle('hidden',name!==id);}
@@ -19,4 +19,9 @@ function move(e){if(!active||paused)return;const r=canvas.getBoundingClientRect(
 canvas.addEventListener('pointerdown',e=>{canvas.setPointerCapture(e.pointerId);move(e);});canvas.addEventListener('pointermove',e=>{if(e.buttons)move(e);});
 for(const direction of ['left','right']){const button=$(direction);button.addEventListener('pointerdown',e=>{button.setPointerCapture(e.pointerId);keys[direction]=true;});for(const event of ['pointerup','pointercancel','lostpointercapture'])button.addEventListener(event,()=>keys[direction]=false);}
 document.addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight'].includes(e.key)&&active){e.preventDefault();keys[e.key==='ArrowLeft'?'left':'right']=true;}});document.addEventListener('keyup',e=>{if(e.key==='ArrowLeft')keys.left=false;if(e.key==='ArrowRight')keys.right=false;});document.addEventListener('visibilitychange',()=>{if(document.hidden)window.pauseGame();});window.addEventListener('blur',window.pauseGame);
-$('start').onclick=start;$('again').onclick=start;$('back').onclick=home;$('quit').onclick=home;$('pause').onclick=togglePause;$('about').onclick=()=>$('info').showModal();$('closeInfo').onclick=()=>$('info').close();
+$('start').onclick=start;$('again').onclick=start;$('back').onclick=home;$('quit').onclick=home;$('pause').onclick=togglePause;$('about').onclick=()=>openInfo();$('closeInfo').onclick=()=>closeInfo();
+
+function openInfo(){$('info').classList.remove('hidden');$('closeInfo').focus();}
+function closeInfo(){$('info').classList.add('hidden');$('about').focus();}
+window.handleBack=()=>{if(!$('info').classList.contains('hidden')){closeInfo();return;}if(active){home();return;}if(!$('result').classList.contains('hidden')){home();return;}};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')window.handleBack();});
