@@ -4,7 +4,7 @@ const canvas=$('field'), ctx=canvas.getContext('2d');
 let high=0; try { const saved=Number(localStorage.getItem('agn-record'));high=Number.isFinite(saved)&&saved>=0?Math.floor(saved):0; } catch(_) {}
 let score=0,lives=3,time=60,x=200,items=[],spawn=0,last=0,active=false,paused=false,frame=0,keys={left:false,right:false};
 $('record').textContent=high;
-function show(id){for(const name of ['home','play','result']) $(name).classList.toggle('hidden',name!==id);}
+function show(id){document.body.classList.toggle('playing',id==='play');for(const name of ['home','play','result']) $(name).classList.toggle('hidden',name!==id);if(id==='play')fitField();}
 function hud(){ $('score').textContent=score+' pts';$('lives').textContent=Array(lives).fill('♥').join(' ');$('clock').textContent=Math.ceil(time)+' s'; }
 function start(){cancelAnimationFrame(frame);score=0;lives=3;time=60;x=200;items=[];spawn=0;last=0;keys.left=keys.right=false;active=true;paused=false;$('pause').textContent='Pause';$('announcement').textContent='';show('play');hud();frame=requestAnimationFrame(tick);}
 function end(){active=false;cancelAnimationFrame(frame);if(score>high){high=score;try{localStorage.setItem('agn-record',String(high));}catch(_){}}$('record').textContent=high;$('finalScore').textContent=score+' points';$('finalRecord').textContent='Meilleur score : '+high+' points';show('result');}
@@ -31,3 +31,14 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')window.handleBack();
 
 // Brief branded opening; local game is ready before this script runs.
 setTimeout(()=>{document.body.classList.remove("loading");$("splash").remove();},1200);
+
+function fitField(){
+ if($('play').classList.contains('hidden'))return;
+ const main=document.querySelector('main'),header=document.querySelector('header'),play=$('play');
+ const landscape=matchMedia('(orientation:landscape) and (min-width:560px) and (max-height:600px)').matches;
+ let width;
+ if(landscape){const availableHeight=innerHeight-header.getBoundingClientRect().height-40;const availableWidth=play.clientWidth-216;width=Math.min(availableWidth,Math.max(120,availableHeight)*400/520);}
+ else{let occupied=header.getBoundingClientRect().height+40;for(const child of play.children){if(child===canvas)continue;const style=getComputedStyle(child);occupied+=child.getBoundingClientRect().height+parseFloat(style.marginTop)+parseFloat(style.marginBottom);}width=Math.min(play.clientWidth,Math.max(130,innerHeight-occupied-8)*400/520);}
+ canvas.style.width=Math.floor(width)+'px';canvas.style.height=Math.floor(width*520/400)+'px';
+}
+window.addEventListener('resize',fitField);
