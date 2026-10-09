@@ -23,5 +23,8 @@ $('start').onclick=start;$('again').onclick=start;$('back').onclick=home;$('quit
 
 function openInfo(){$('info').classList.remove('hidden');$('closeInfo').focus();}
 function closeInfo(){$('info').classList.add('hidden');$('about').focus();}
-window.handleBack=()=>{if(!$('info').classList.contains('hidden')){closeInfo();return true;}if(active){home();return true;}if(!$('result').classList.contains('hidden')){home();return true;}return false;};
+$('privacyButton').onclick=()=>{window.pauseGame();$('privacy').classList.remove('hidden');$('closePrivacy').focus();};
+function closePrivacy(){$('privacy').classList.add('hidden');$('privacyButton').focus();}
+$('closePrivacy').onclick=closePrivacy;
+window.handleBack=()=>{if(!$('privacy').classList.contains('hidden')){closePrivacy();return true;}if(!$('info').classList.contains('hidden')){closeInfo();return true;}if(active){home();return true;}if(!$('result').classList.contains('hidden')){home();return true;}return false;};
 document.addEventListener('keydown',e=>{if(e.key==='Escape')window.handleBack();});
