@@ -23,5 +23,5 @@ $('start').onclick=start;$('again').onclick=start;$('back').onclick=home;$('quit
 
 function openInfo(){$('info').classList.remove('hidden');$('closeInfo').focus();}
 function closeInfo(){$('info').classList.add('hidden');$('about').focus();}
-window.handleBack=()=>{if(!$('info').classList.contains('hidden')){closeInfo();return;}if(active){home();return;}if(!$('result').classList.contains('hidden')){home();return;}};
+window.handleBack=()=>{if(!$('info').classList.contains('hidden')){closeInfo();return true;}if(active){home();return true;}if(!$('result').classList.contains('hidden')){home();return true;}return false;};
 document.addEventListener('keydown',e=>{if(e.key==='Escape')window.handleBack();});

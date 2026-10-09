@@ -27,7 +27,7 @@ public class MainActivity extends Activity {
         setContentView(game);
         game.loadUrl("file:///android_asset/index.html");
     }
-    @Override public void onBackPressed() { game.evaluateJavascript("window.handleBack && window.handleBack()", null); }
+    @Override public void onBackPressed() { game.evaluateJavascript("window.handleBack && window.handleBack()", result -> { if (!"true".equals(result)) finish(); }); }
     @Override protected void onPause() { game.evaluateJavascript("window.pauseGame && window.pauseGame()", null); game.onPause(); super.onPause(); }
     @Override protected void onResume() { super.onResume(); if(game != null) game.onResume(); }
     @Override protected void onDestroy() { game.destroy(); super.onDestroy(); }
