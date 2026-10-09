@@ -25,7 +25,10 @@ Pour signer, fournir les secrets du repository : `AGN_KEYSTORE_BASE64`, `AGN_STO
 Une fois la construction terminée, télécharger l'artifact `AGN-2026-android` dans Actions. Aucune publication Play Store n'est automatique.
 
 ## Vérification effectuée
-Syntaxe JavaScript, scénarios de collecte, collision, fin de partie, pause/reprise et persistance du record vérifiés localement. La compilation Android et le test sur appareil restent à effectuer : le SDK et Gradle ne sont pas disponibles dans l'environnement de préparation.
+GitHub Actions a compilé l'APK et l'AAB pour API 36 et terminé lintRelease sans erreur (3 avertissements examinés : attribut moderne ignoré sur ancien Android, JavaScript requis pour le jeu local, règles de sauvegarde). Le test Chromium a vérifié les neuf boutons, le toucher, le déplacement et son arrêt, les collisions, les trois vies, la fin du temps, pause/reprise, rejouer, retour, le record après rechargement et quatre largeurs d'écran. Aucun défaut JavaScript n'a été observé. Le test sur téléphone Android physique et la revue Google Play restent à effectuer.
 
 ## Confidentialité
 Les seules données conservées sont le meilleur score sur l'appareil. Le jeu ne collecte ni ne transmet de données personnelles. Aucun événement réel de l'association n'est inventé. Les points sont purement ludiques.
+
+## Livraison signée
+L'AAB de livraison a été signé séparément avec une clé de téléversement privée (RSA 3072 / SHA-256), puis sa signature a été vérifiée. La clé n'est jamais dans ce dépôt. L'archive de sauvegarde de signature est fournie au propriétaire séparément : la conserver pour les mises à jour. Le workflow continue à produire un AAB non signé si ses secrets de signature ne sont pas configurés.
