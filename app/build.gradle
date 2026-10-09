@@ -1,0 +1,28 @@
+plugins { id 'com.android.application' }
+android {
+    namespace 'agn.y2026.organization.com'
+    compileSdk 36
+    defaultConfig {
+        applicationId 'agn.y2026.organization.com'
+        minSdk 23
+        targetSdk 36
+        versionCode 1
+        versionName '1.0'
+    }
+    signingConfigs {
+        release {
+            if (System.getenv('AGN_KEYSTORE_PATH')) {
+                storeFile file(System.getenv('AGN_KEYSTORE_PATH'))
+                storePassword System.getenv('AGN_STORE_PASSWORD')
+                keyAlias System.getenv('AGN_KEY_ALIAS')
+                keyPassword System.getenv('AGN_KEY_PASSWORD')
+            }
+        }
+    }
+    buildTypes {
+        release {
+            if (System.getenv('AGN_KEYSTORE_PATH')) signingConfig signingConfigs.release
+            minifyEnabled false
+        }
+    }
+}
